@@ -25,7 +25,13 @@ io.on('connection', (socket) => {
       return callback('Name and room name are required.');
     }
 
-    socket.join(params.room);
+    var duplicateUsers = users.getUserByName(params.name);
+
+    if (duplicateUsers[0]) {
+      return callback('User with that name already exists');
+    }
+
+    socket.join(params.room.toLowerCase());
 
     users.removeUser(socket.id);
 
